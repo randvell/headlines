@@ -1,0 +1,52 @@
+.container--header {
+  display: grid;
+  grid-template-columns: max-content 1fr 320px;
+  grid-template-areas: 'logo search country';
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.logo {
+  grid-area: logo;
+}
+
+.input::placeholder {
+  color: #212121;
+  font-family: 'Roboto Light';
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 80%;
+  letter-spacing: 0;
+}
+
+.search {
+  grid-area: search;
+  place-self: end;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+}
+
+.search__input {
+  width: 100%;
+  border: none;
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.input-container {
+  padding: 0 20px;
+  box-sizing: border-box;
+  border: 1px solid #e6e6e6;
+  border-radius: 22px;
+  background: #ffffff;
+  height: 44px;
+}
+
+.select-wrapper--country {
+  grid-area: country;
+  max-width: 320px;
+  width: 100%;
+}

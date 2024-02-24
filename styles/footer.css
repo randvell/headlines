@@ -1,0 +1,16 @@
+.footer {
+  border-bottom: 0;
+}
+
+.container--footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.social {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
