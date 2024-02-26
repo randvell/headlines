@@ -1,8 +1,13 @@
-import { getHeadlines } from './api.js';
+import { getHeadlines, searchNews } from './api.js';
+import { getSearchParam } from './helper.js';
 import { renderArticles } from './render.js';
 
 const init = async () => {
-  getHeadlines(renderArticles);
+  if (getSearchParam) {
+    searchNews(renderArticles);
+  } else {
+    getHeadlines(renderArticles);
+  }
 };
 
 document.addEventListener('DOMContentLoaded', init);

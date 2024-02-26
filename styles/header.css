@@ -6,7 +6,7 @@
   gap: 30px;
 }
 
-.logo {
+.logo-container {
   grid-area: logo;
 }
 

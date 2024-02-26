@@ -1,3 +1,5 @@
+import { getHeadlines } from './api.js';
+
 const newsList = document.querySelector('.news');
 
 const createNewsCard = (cardData) => {
@@ -8,16 +10,30 @@ const createNewsCard = (cardData) => {
   const card = document.createElement('li');
   card.classList.add('news__card', 'card');
 
-  const linkImg = document.createElement('a');
-  linkImg.classList.add('card__link');
-  linkImg.href = cardData.url;
+  const imgContainer = document.createElement('div');
+  imgContainer.classList.add('card__image-container');
 
   const img = document.createElement('img');
   img.classList.add('card__image');
   img.src = cardData.urlToImage;
 
-  linkImg.append(img);
-  card.append(linkImg);
+  const preloader = document.createElement('img');
+  preloader.classList.add('preloader');
+  preloader.src = '../assets/preload.svg';
+  imgContainer.append(preloader);
+
+  img.addEventListener('load', () => {
+    preloader.remove();
+    imgContainer.append(img);
+  });
+
+  img.addEventListener('error', () => {
+    img.src = '../assets/placeholder.jpeg';
+    preloader.remove();
+    imgContainer.append(img);
+  });
+
+  card.append(imgContainer);
 
   const linkTitle = document.createElement('a');
   linkTitle.classList.add('card__link', 'card__link--title');
@@ -53,14 +69,17 @@ const createNewsCard = (cardData) => {
   return card;
 };
 
-export const renderArticles = ({ articles }) => {
+export const renderArticles = ({ articles, limit = 8 }) => {
   if (!articles) {
     return;
   }
 
-  newsList.innerHTML = '';
-
-  articles.slice(0, 8).forEach((cardData) => {
+  articles.slice(0, limit).forEach((cardData) => {
     newsList.append(createNewsCard(cardData));
   });
 };
+
+export const countrySelector = document.querySelector('#country-selector');
+countrySelector.addEventListener('change', () => {
+  getHeadlines(renderArticles);
+});
