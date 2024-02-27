@@ -1,6 +1,5 @@
 import { getHeadlines } from './api.js';
-
-const newsList = document.querySelector('.news');
+import { getSearchParam } from './helper.js';
 
 const createNewsCard = (cardData) => {
   const dateObject = new Date(cardData.publishedAt);
@@ -69,14 +68,71 @@ const createNewsCard = (cardData) => {
   return card;
 };
 
-export const renderArticles = ({ articles, limit = 8 }) => {
+const renderArticles = (container, articles, limit = 8) => {
   if (!articles) {
     return;
   }
 
   articles.slice(0, limit).forEach((cardData) => {
-    newsList.append(createNewsCard(cardData));
+    container.append(createNewsCard(cardData));
   });
+};
+
+const createHeadingSection = (title) => {
+  const titleSection = document.createElement('div');
+  titleSection.classList.add('section');
+  const titleContainer = document.createElement('div');
+  titleContainer.classList.add('container', 'container--heading');
+  const titleEl = document.createElement('h2');
+  titleEl.classList.add('page-title');
+  titleEl.textContent = title;
+
+  titleContainer.append(titleEl);
+  titleSection.append(titleContainer);
+  return titleSection;
+};
+
+const createArticlesSection = () => {
+  const articlesSection = document.createElement('div');
+  articlesSection.classList.add('section', 'section--news');
+  const container = document.createElement('div');
+  container.classList.add('container', 'container--page');
+  const newsList = document.createElement('ul');
+  newsList.classList.add('news');
+
+  articlesSection.list = newsList;
+  container.append(newsList);
+  articlesSection.append(container);
+
+  return articlesSection;
+};
+
+export const renderSearch = ({ articles, limit = 8 }) => {
+  if (!articles) {
+    return;
+  }
+
+  const main = document.querySelector('main');
+  const heading = createHeadingSection('Свежие новости');
+  const news = createArticlesSection();
+  main.append(heading, news);
+  renderArticles(news.list, articles, limit);
+};
+
+export const renderHeadlines = ({ articles, limit = 8 }) => {
+  if (!articles) {
+    return;
+  }
+
+  const search = getSearchParam();
+  const count = Math.min(limit, articles.length);
+  const title = `По вашему запросу "${search}" найдено ${count} результатов`;
+
+  const main = document.querySelector('main');
+  const heading = createHeadingSection(title);
+  const news = createArticlesSection();
+  main.append(heading, news);
+  renderArticles(news.list, articles, limit);
 };
 
 export const countrySelector = document.querySelector('#country-selector');

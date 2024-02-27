@@ -1,12 +1,17 @@
 import { getHeadlines, searchNews } from './api.js';
 import { getSearchParam } from './helper.js';
-import { renderArticles } from './render.js';
+import { renderHeadlines, renderSearch } from './render.js';
 
 const init = async () => {
-  if (getSearchParam) {
-    searchNews(renderArticles);
+  if (getSearchParam()) {
+    Promise.all([
+      searchNews((articles) =>
+        renderSearch({ articles: articles.articles, limit: 8 }),
+      ),
+      getHeadlines(renderHeadlines),
+    ]);
   } else {
-    getHeadlines(renderArticles);
+    getHeadlines(renderHeadlines);
   }
 };
 

@@ -8,7 +8,7 @@ const isTestMode = true;
 const API_URL = 'https://newsapi.org/v2';
 const API_KEY = 'b4b5a2b5ec514a828611e4f8b96d179c';
 
-const apiRequest = async ({ action, query, options }) => {
+const apiRequest = async ({ action, query, options = {} }) => {
   let requestUrl = '';
   if (isTestMode) {
     requestUrl = `./js/mock/${action}.json`;
@@ -21,7 +21,6 @@ const apiRequest = async ({ action, query, options }) => {
   }
 
   options.headers ||= {};
-  options.headers['Content-Type'] = 'application/json';
   options.headers['X-Api-Key'] = API_KEY;
 
   const response = await fetch(requestUrl, options);
@@ -36,7 +35,7 @@ const apiRequest = async ({ action, query, options }) => {
 
 export const getHeadlines = async (callback) => {
   const requestObj = {
-    action: 'headlines',
+    action: 'top-headlines',
     query: {},
     options: { method: 'get' },
   };
@@ -63,9 +62,11 @@ export const searchNews = async (callback) => {
   };
 
   const q = getSearchParam();
-  if (q) {
-    requestObj.query.q = q;
+  if (!q) {
+    return;
   }
+
+  requestObj.query.q = q;
 
   const result = await apiRequest(requestObj);
 
